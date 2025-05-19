@@ -2,6 +2,8 @@
 #include <iostream>
 #include <string>
 #include "usuarios.h"
+#include "gestor_usuario.h"
+
 using namespace std;
 
 void menuAdministrador() {
@@ -18,36 +20,20 @@ void menuUsuario() {
     cout << "3. Cancelacion de reservas\n";
     cout << "4. Salir\n";
 }
+int main(){
 
-string login(string *documento, string *contrasena){
-    string tipo;
-    //Prototipo de autenticacion
-    return tipo;
-}
+string tipo;
+Usuarios* sesion = loginDesdeArchivos("admins.txt", "usuarios.txt", tipo);
 
-int main() {
-    string documento;
-    string contrasena;
-
-    cout << "Bienvenido a UdeAStay\n";
-    cout << "Ingrese su numero de documento: ";
-    cin >> documento;
-    cout << "Ingrese su contrasena: ";
-
-
-    // Boceto de autenticación (simulada)
-    if (login(&documento,&contrasena) == "admin") {
-        cout << "\nInicio de sesión exitoso como ADMINISTRADOR\n";
-        menuAdministrador();
-    } else if (login(&documento,&contrasena) == "usuario") {
-        cout << "\nInicio de sesión exitoso como HUESPED\n";
-        menuUsuario();
-    } else {
-        cout << "\nTipo de usuario no válido. Intente de nuevo.\n";
+if (sesion != nullptr) {
+    if (tipo == "admin") {
+        cout << "Bienvenido administrador: " << sesion->getNombre() << endl;
+    } else if (tipo == "usuario") {
+        cout << "Bienvenido usuario: " << sesion->getNombre() << endl;
     }
-
-    return 0;
+    // No olvides liberar la sesión si no la usas después
+    delete sesion;
 }
-
-
-
+else {
+    cout << "No se pudo iniciar sesión." << endl;}
+}
