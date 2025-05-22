@@ -13,10 +13,11 @@ private:
     string tipo; // "Casa" o "Apartamento"
     float precioNoche;
     string documentoAdmin; // vínculo al dueño (administrador)
+    float puntuacion;
 
 public:
     Lugar(string codigo, string nombre, string departamento, string municipio,
-          string tipo, float precioNoche, string documentoAdmin);
+          string tipo, float precioNoche, string documentoAdmin, float puntuacion);
 
     string getCodigo();
     string getNombre();
@@ -25,6 +26,7 @@ public:
     string getTipo();
     float getPrecioNoche();
     string getDocumentoAdmin();
+    float getPuntuacion();
 
     ~Lugar();
 };

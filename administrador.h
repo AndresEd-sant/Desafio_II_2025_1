@@ -2,6 +2,8 @@
 #define ADMINISTRADOR_H
 
 #include <string>
+#include "lugar.h"
+
 using namespace std;
 
 class administrador {
@@ -11,16 +13,18 @@ private:
     string Contrasena;
     unsigned int N_lugares;
     float Puntuacion;
-    string* lugares;
+    Lugar** lugares;
 
 public:
-    administrador(string nombre, string documento, string contrasena, unsigned int n_lugares, float puntuacion);
-    string getNombre();
+    administrador(string nombre, string documento, string contrasena,
+                  unsigned int n_lugares, float puntuacion);
     string getDocumento();
-    string getContrasena();
+    string getNombre();
     unsigned int getN_lugares();
-    float getPuntuacion();
+    Lugar** getLugares();
+    void cargarLugaresDesdeArchivo(const string& nombreArchivo);
+    void verYcancelarReservasActivas(const string& archivoReservas);
     ~administrador();
 };
 
-#endif // ADMINISTRADOR_H
+#endif
