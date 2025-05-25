@@ -16,7 +16,15 @@ fecha::fecha(const string& formato) {
 }
 
 void fecha::cargarDesdeCadena(const char* formato) {
-    sscanf(formato, "%d-%d-%d", &anio, &mes, &dia);
+    int d, m, a;
+    int campos = sscanf(formato, "%d-%d-%d", &a, &m, &d);
+    if (campos != 3 || a < 0 || m < 1 || m > 12 || d < 1 || d > 31) {
+        printf("Error: formato de fecha invalido [%s]\n", formato);
+        dia = mes = anio = 1; // Fallback mínimo válido
+    }
+    dia = d;
+    mes = m;
+    anio = a;
 }
 
 void fecha::cargarDesdeCadena(const string& formato) {
@@ -70,7 +78,7 @@ const char* fecha::formatoExtendido() {
 
 void fecha::sumarDias(int n) {
     // Días por mes común
-    static const int diasMes[] = { 31,28,31,30,31,30,31,31,30,31,30,31 };
+    unsigned short int diasMes[] = { 31,28,31,30,31,30,31,31,30,31,30,31 };
 
     for (int i = 0; i < n; ++i) {
         dia++;
@@ -88,6 +96,10 @@ void fecha::sumarDias(int n) {
             }
         }
     }
+}
+
+fecha::~fecha(){
+    //nada dinamico
 }
 
 

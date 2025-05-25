@@ -18,6 +18,7 @@ private:
 public:
     administrador(string nombre, string documento, string contrasena,
                   unsigned int n_lugares, float puntuacion);
+    void actualizarHistorico(const string& archivoReservas, const string& archivoHistorico);
     string getDocumento();
     string getNombre();
     unsigned int getN_lugares();

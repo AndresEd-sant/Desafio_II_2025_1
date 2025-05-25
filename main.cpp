@@ -33,12 +33,12 @@ int main() {
                 cin >> opcion;
                 switch (opcion) {
                 case 1:
-                    cout << "(Simulacion cambio de dia no implementada aun)\n";
+                    adminObj->actualizarHistorico("reservas_activas.txt", "historico.txt");
                     break;
                 case 2: {
                     Lugar** lugares = adminObj->getLugares();
                     for (unsigned int i = 0; i < adminObj->getN_lugares(); ++i)
-                        cout << lugares[i]->getNombre() << " en " << lugares[i]->getMunicipio() << endl;
+                        cout <<"["<<i+1<<"] "<< lugares[i]->getNombre() << " en " << lugares[i]->getMunicipio() << endl;
                     break;
                 }
                 case 3:

@@ -2,6 +2,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include "fecha.h"
 
 administrador::administrador(string nombre, string documento, string contrasena,
                              unsigned int n_lugares, float puntuacion) {
@@ -98,7 +99,7 @@ void administrador::verYcancelarReservasActivas(const string& archivoReservas) {
     // Paso 2: Cargar esas reservas en memoria
     archivo.open(archivoReservas);
     string** reservas = new string*[reservasAdmin];
-    int index = 0;
+    unsigned int index = 0;
     while (getline(archivo, linea)) {
         stringstream ss(linea);
         string codRes, doc, nombreH, idLugar, fechaIni, fechaFin, costo;
@@ -158,6 +159,7 @@ void administrador::verYcancelarReservasActivas(const string& archivoReservas) {
 
         if (num >= 1 && num <= reservasAdmin) {
             string codigoAEliminar = reservas[num - 1][0];
+            cout << codigoAEliminar <<endl;
 
             // Paso 5: Reescribir archivo excluyendo esa reserva
             ifstream entrada(archivoReservas);
@@ -185,6 +187,78 @@ void administrador::verYcancelarReservasActivas(const string& archivoReservas) {
     for (unsigned int i = 0; i < reservasAdmin; ++i)
     {delete[] reservas[i];}
     delete[] reservas;
+}
+
+
+void administrador::actualizarHistorico(const string& archivoReservas, const string& archivoHistorico) {
+    cout << "Ingrese la fecha de corte (formato YYYY-MM-DD): ";
+    unsigned short int dia, mes, anio;
+    cout << "\n Ingrese el anio: ";
+    cin >> anio;
+    cout << "\n Ingrese el mes: ";
+    cin >> mes;
+    cout << "\n Ingrese el Dia: ";
+    cin >> dia;
+
+    fecha fechaCorte(anio, mes, dia);
+
+    ifstream entrada(archivoReservas);
+    ofstream historico(archivoHistorico, ios::app);
+    ofstream temporal("temp.txt");
+
+    if (!entrada.is_open() || !historico.is_open() || !temporal.is_open()) {
+        cout << "Error abriendo los archivos.\n";
+        return;
+    }
+
+    string linea;
+    int movidas = 0;
+
+
+    while (getline(entrada, linea)) {
+
+
+        // Separar los 7 campos usando posiciones y substrings
+        int indices[7];
+        int count = 0;
+
+        for (int i = 0; i < linea.length() && count < 7; ++i) {
+            if (linea[i] == ';') {
+                indices[count++] = i;
+            }
+        }
+
+        // Si no tiene 7 campos, se omite
+        if (count < 6) continue;
+
+        // Extraer campo[5] que es la fechaFinal (delimitado por índices)
+        string fechaFinal = linea.substr(indices[4] + 1, indices[5] - indices[4] - 1);
+
+        // Extraer año, mes, día manualmente
+        unsigned short int fa, fm, fd;
+        int pos1 = fechaFinal.find('-');
+        int pos2 = fechaFinal.find('-', pos1 + 1);
+
+        fa = stoi(fechaFinal.substr(0, pos1));
+        fm = stoi(fechaFinal.substr(pos1 + 1, pos2 - pos1 - 1));
+        fd = stoi(fechaFinal.substr(pos2 + 1));
+
+        if (fa < anio || (fa == anio && fm < mes) || (fa == anio && fm == mes && fd < dia)) {
+            historico << linea << endl;
+            movidas++;
+        } else {
+            temporal << linea << endl;
+        }
+    }
+
+    entrada.close();
+    historico.close();
+    temporal.close();
+
+    remove(archivoReservas.c_str());
+    rename("temp.txt", archivoReservas.c_str());
+
+    cout << "Histórico actualizado exitosamente. " << movidas << " reservas movidas.\n";
 }
 
 

@@ -28,6 +28,7 @@ public:
     bool operator<(const fecha& otra) const;
     bool operator>(const fecha& otra) const;
     bool operator==(const fecha& otra) const;
+    ~fecha();
 };
 
 #endif // FECHA_H
