@@ -1,3 +1,4 @@
+// src/main.cpp
 #include <iostream>
 #include "administrador.h"
 #include "utilidades.h"
@@ -73,9 +74,7 @@ int main() {
                     break;
                 }
                 case 3:
-
                     //cout << "Cerrando sesion de " << UserObj->getNombre() << ".\n";
-
                     break;
                 default:
                     cout << "Opcion invalida.\n";
@@ -83,13 +82,9 @@ int main() {
             } while (opcion != 3);
 
             delete adminObj;
-
         }
-
         else {
             cout << "\nCredenciales invalidas o usuario no encontrado.\n";
         }
-    }
-
     return 0;
 }
