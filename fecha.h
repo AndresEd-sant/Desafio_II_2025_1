@@ -10,11 +10,6 @@ private:
 
 public:
     fecha(unsigned short int d, unsigned short int m, unsigned short int a);
-    fecha(const char* formato);
-    fecha(const string& formato);
-
-    void cargarDesdeCadena(const char* formato);
-    void cargarDesdeCadena(const string& formato);
 
     void mostrar() const;
     const char* formatoExtendido();

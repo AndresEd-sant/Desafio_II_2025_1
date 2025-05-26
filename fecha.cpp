@@ -1,34 +1,13 @@
 #include "fecha.h"
 #include <cstdio>
+#include <cstring>
+#include <iostream>
+using namespace std;
 
 fecha::fecha(unsigned short int d, unsigned short int m, unsigned short int a) {
     dia = d;
     mes = m;
     anio = a;
-}
-
-fecha::fecha(const char* formato) {
-    cargarDesdeCadena(formato);
-}
-
-fecha::fecha(const string& formato) {
-    cargarDesdeCadena(formato);
-}
-
-void fecha::cargarDesdeCadena(const char* formato) {
-    int d, m, a;
-    int campos = sscanf(formato, "%d-%d-%d", &a, &m, &d);
-    if (campos != 3 || a < 0 || m < 1 || m > 12 || d < 1 || d > 31) {
-        printf("Error: formato de fecha invalido [%s]\n", formato);
-        dia = mes = anio = 1; // Fallback mínimo válido
-    }
-    dia = d;
-    mes = m;
-    anio = a;
-}
-
-void fecha::cargarDesdeCadena(const string& formato) {
-    sscanf(formato.c_str(), "%d-%d-%d", &anio, &mes, &dia);
 }
 
 unsigned short int fecha::getDia() { return dia; }

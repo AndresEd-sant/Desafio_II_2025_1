@@ -6,7 +6,8 @@
 using namespace std;
 
 int main() {
-    while (true) {
+    while (true)
+    {
         unsigned short int selec = 0;
 
         do {
@@ -82,9 +83,12 @@ int main() {
             } while (opcion != 3);
 
             delete adminObj;
+            break;
         }
         else {
             cout << "\nCredenciales invalidas o usuario no encontrado.\n";
         }
-    return 0;
+
+    }
+return 0;
 }
