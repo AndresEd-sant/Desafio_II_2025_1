@@ -15,12 +15,16 @@ private:
     unsigned int N_reservaciones;
 
 public:
-    Usuarios(string documento, string contrasena, string nombre);
+    Usuarios(string documento, string contrasena, string nombre ,string Antiguedad);
 
     string getDocumento();
     string getNombre();
-    string getcontrasena();
+    string getContrasena();
+    string getAntiguedad();
     unsigned int getN_reservaciones();
+    void cancelarReserva();
+    void hacerReserva();
+    void verReservas();
 
     ~Usuarios();
 };

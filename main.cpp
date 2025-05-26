@@ -1,53 +1,92 @@
-// src/main.cpp
 #include <iostream>
 #include <string>
 #include "usuarios.h"
+#include "utilidades.h"
+#include "lugar.h"
+
 using namespace std;
 
-void menuAdministrador() {
-    cout << "\n=== MENÚ ADMINISTRADOR ===\n";
-    cout << "1. Cambio de Dia\n";
-    cout << "2. Consultar Huespedes\n";
-    cout << "3. Salir\n";
-}
-
-void menuUsuario() {
-    cout << "\n=== MENÚ HUÉSPED ===\n";
-    cout << "1. Buscar alojamiento\n";
-    cout << "2. Ver reservaciones\n";
-    cout << "3. Cancelacion de reservas\n";
-    cout << "4. Salir\n";
-}
-
-string login(string *documento, string *contrasena){
-    string tipo;
-    //Prototipo de autenticacion
-    return tipo;
-}
-
 int main() {
-    string documento;
-    string contrasena;
+    while (true) {
+        unsigned short int selec = 0;
 
-    cout << "Bienvenido a UdeAStay\n";
-    cout << "Ingrese su numero de documento: ";
-    cin >> documento;
-    cout << "Ingrese su contrasena: ";
+        do {
+            menuPrincipal();
+            cin >> selec;
+        } while (selec != 1 && selec != 2);
 
+        if (selec == 2) {
+            cout << "Saliendo del sistema. Hasta luego\n";
+            break;
+        }
 
-    // Boceto de autenticación (simulada)
-    if (login(&documento,&contrasena) == "admin") {
-        cout << "\nInicio de sesión exitoso como ADMINISTRADOR\n";
-        menuAdministrador();
-    } else if (login(&documento,&contrasena) == "usuario") {
-        cout << "\nInicio de sesión exitoso como HUESPED\n";
-        menuUsuario();
-    } else {
-        cout << "\nTipo de usuario no válido. Intente de nuevo.\n";
+        Usuarios* usuario = nullptr;
+        string tipo = login(usuario);
+
+        if (tipo == "admin") {
+            cout << "\nInicio de sesion exitoso como ADMINISTRADOR\n";
+            // cout << "Bienvenido " << adminObj->getNombre() << endl;
+            // adminObj->cargarLugaresDesdeArchivo("lugares.txt");
+
+            unsigned int opcion;
+            do {
+                menuAdministrador();
+                cin >> opcion;
+                switch (opcion) {
+                case 1:
+                    cout << "(Simulacion de cambio de día no implementada aun)\n";
+                    break;
+                case 2: {
+                    // Lugar** lugares = adminObj->getLugares();
+                    // for (unsigned int i = 0; i < adminObj->getN_lugares(); ++i)
+                    //     cout << lugares[i]->getNombre() << " en " << lugares[i]->getMunicipio() << endl;
+                    break;
+                }
+                case 3:
+                    // adminObj->verYcancelarReservasActivas("reservas_activas.txt");
+                    break;
+                case 4:
+                    // cout << "Cerrando sesión de " << adminObj->getNombre() << ".\n";
+                    break;
+                default:
+                    cout << "Opcion invalida.\n";
+                }
+            } while (opcion != 4);
+
+            // delete adminObj;
+
+        } else if (tipo == "user") {
+            cout << "\nInicio de sesion exitoso como USUARIO\n";
+            cout << "Bienvenido, " << usuario->getNombre() << endl;
+
+            unsigned int opcion;
+            do {
+                menuUsuario();
+                cin >> opcion;
+                switch (opcion) {
+                case 1:
+                    usuario->hacerReserva();
+                    break;
+                case 2:
+                    // aqui lo de ver reservas
+                    break;
+                case 3:
+                    // aqui lo de cancelar
+                    break;
+                case 4:
+                    cout << "Cerrando sesión de " << usuario->getNombre() << ".\n";
+                    break;
+                default:
+                    cout << "Opción inválida.\n";
+                }
+            } while (opcion != 4);
+
+            delete usuario;
+
+        } else {
+            cout << "\nCredenciales invalidas o usuario no encontrado.\n";
+        }
     }
 
     return 0;
 }
-
-
-
