@@ -148,10 +148,10 @@ void Usuarios::hacerReserva() {
     }
     archivoReservas.close();
 
-    // Calcular costoTotal - ejemplo simplificado (puedes mejorar)
+    // Calcular costoTotal - ejemplo simplificado 
     int costoTotal = 100000;
 
-    // Generar código reserva sencillo (puedes hacer algo mejor)
+    // Generar código reserva sencillo
     string nuevoCodigo = "R" + Documento.substr(Documento.length() - 3) + "01";
 
     ofstream out("reservas_activas.txt", ios::app);
