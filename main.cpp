@@ -68,10 +68,10 @@ int main() {
                     usuario->hacerReserva();
                     break;
                 case 2:
-                    // aqui lo de ver reservas
+                    usuario->verReservas();
                     break;
                 case 3:
-                    // aqui lo de cancelar
+                    usuario->cancelarReserva();
                     break;
                 case 4:
                     cout << "Cerrando sesión de " << usuario->getNombre() << ".\n";

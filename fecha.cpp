@@ -27,10 +27,19 @@ bool fecha::operator>(const fecha& otra) const {
 bool fecha::operator==(const fecha& otra) const {
     return dia == otra.dia && mes == otra.mes && anio == otra.anio;
 }
+string fecha::formatoCorto() const {
+    string resultado;
 
-void fecha::mostrar() const {
-    printf("%04d-%02d-%02d", anio, mes, dia);
+    resultado += to_string(anio);
+    resultado += "-";
+    if (mes < 10) resultado += "0";
+    resultado += to_string(mes);
+    resultado += "-";
+    if (dia < 10) resultado += "0";
+    resultado += to_string(dia);
+    return resultado;
 }
+
 bool fecha::esValida() const {
     if (anio < 1 || mes < 1 || mes > 12 || dia < 1){
         return false;

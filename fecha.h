@@ -11,10 +11,9 @@ private:
 public:
     fecha(unsigned short int d, unsigned short int m, unsigned short int a);
 
-    void mostrar() const;
+    string formatoCorto() const;
     const char* formatoExtendido();
     bool esValida() const;
-
     unsigned short int getDia();
     unsigned short int getMes();
     unsigned short int getAnio();

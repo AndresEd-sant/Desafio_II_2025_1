@@ -2,6 +2,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include "fecha.h"
 using namespace std;
 
 void menuAdministrador() {
@@ -17,7 +18,7 @@ void menuPrincipal() {
 }
 
 void menuUsuario() {
-    cout << "\n=== MENU HUÉSPED ===\n";
+    cout << "\n=== MENU HUESPED ===\n";
     cout << "1. Hacer reservacion\n";
     cout << "2. Consultar reservaciones\n";
     cout << "3. Cancelacion de reservas\n";
@@ -93,3 +94,37 @@ string login(Usuarios*& usuario) {
     return "0";
 }
 
+fecha* convertirAFecha(const char* strFecha) {
+    unsigned int anio = 0, mes = 0, dia = 0;
+    int i = 0, j = 0;
+    char buffer[5];
+
+    // Año (4 caracteres)
+    for (; i < 4; ++i)
+        buffer[j++] = strFecha[i];
+    buffer[j] = '\0';
+    anio = atoi(buffer);
+
+    j = 0;
+    i++; // saltar el guion
+
+    // Mes (2 caracteres)
+    for (; i < 7; ++i)
+        buffer[j++] = strFecha[i];
+    buffer[j] = '\0';
+    mes = atoi(buffer);
+
+    j = 0;
+    i++; // saltar el guion
+
+    // Día (2 caracteres)
+    for (; i < 10; ++i)
+        buffer[j++] = strFecha[i];
+    buffer[j] = '\0';
+    dia = atoi(buffer);
+
+    return new fecha(dia,mes,anio);
+}
+bool hayConflictoFechas(fecha* nuevaInicio, fecha* nuevaFin, fecha* existenteInicio, fecha* existenteFin) {
+    return !( *nuevaFin < *existenteInicio || *existenteFin < *nuevaInicio );
+}
