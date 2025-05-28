@@ -14,6 +14,7 @@ public:
     string formatoCorto() const;
     const char* formatoExtendido();
     bool esValida() const;
+
     unsigned short int getDia();
     unsigned short int getMes();
     unsigned short int getAnio();
@@ -21,9 +22,13 @@ public:
     void sumarDias(int n);
     unsigned int diasHasta(const fecha& otra) const;
 
+
     bool operator<(const fecha& otra) const;
     bool operator>(const fecha& otra) const;
     bool operator==(const fecha& otra) const;
+
+    ~fecha();
+
 };
 
 #endif // FECHA_H

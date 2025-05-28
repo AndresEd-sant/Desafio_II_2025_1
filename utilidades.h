@@ -15,5 +15,5 @@ string generarCodigoUnico();
 unsigned int obtenerCostoLugar(const string& codigoLugar);
 void guardarComentarioReserva(const string& nombreUsuario, const string& codLugar,
                               const fecha* inicio, const fecha* fin);
+#endif // UTILIDADES_H
 
-#endif

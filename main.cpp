@@ -1,13 +1,18 @@
+// src/main.cpp
 #include <iostream>
 #include <string>
 #include "usuarios.h"
 #include "utilidades.h"
 #include "lugar.h"
+#include "administrador.h"
+
 
 using namespace std;
 
 int main() {
+
     while (true) {
+
         unsigned short int selec = 0;
 
         do {
@@ -19,14 +24,15 @@ int main() {
             cout << "Saliendo del sistema. Hasta luego\n";
             break;
         }
-
-        Usuarios* usuario = nullptr;
-        string tipo = login(usuario);
+        Usuarios* userObj = nullptr;
+        administrador* adminObj = nullptr;
+        string tipo = login(adminObj);
 
         if (tipo == "admin") {
             cout << "\nInicio de sesion exitoso como ADMINISTRADOR\n";
-            // cout << "Bienvenido " << adminObj->getNombre() << endl;
-            // adminObj->cargarLugaresDesdeArchivo("lugares.txt");
+            cout << "Bienvenido " << adminObj->getNombre() << endl;
+            adminObj->cargarLugaresDesdeArchivo("lugares.txt");
+
 
             unsigned int opcion;
             do {
@@ -34,31 +40,29 @@ int main() {
                 cin >> opcion;
                 switch (opcion) {
                 case 1:
-                    cout << "(Simulacion de cambio de día no implementada aun)\n";
+                    adminObj->actualizarHistorico("reservas_activas.txt", "historico.txt");
                     break;
                 case 2: {
-                    // Lugar** lugares = adminObj->getLugares();
-                    // for (unsigned int i = 0; i < adminObj->getN_lugares(); ++i)
-                    //     cout << lugares[i]->getNombre() << " en " << lugares[i]->getMunicipio() << endl;
+                    Lugar** lugares = adminObj->getLugares();
+                    for (unsigned int i = 0; i < adminObj->getN_lugares(); ++i)
+                        cout <<"["<<i+1<<"] "<< lugares[i]->getNombre() << " en " << lugares[i]->getMunicipio() << endl;
                     break;
                 }
                 case 3:
-                    // adminObj->verYcancelarReservasActivas("reservas_activas.txt");
+                    adminObj->verYcancelarReservasActivas("reservas_activas.txt");
                     break;
                 case 4:
-                    // cout << "Cerrando sesión de " << adminObj->getNombre() << ".\n";
+                    cout << "Cerrando sesion de " << adminObj->getNombre() << ".\n";
                     break;
                 default:
                     cout << "Opcion invalida.\n";
                 }
             } while (opcion != 4);
 
-            // delete adminObj;
 
         } else if (tipo == "user") {
             cout << "\nInicio de sesion exitoso como USUARIO\n";
             cout << "Bienvenido, " << usuario->getNombre() << endl;
-
             unsigned int opcion;
             do {
                 menuUsuario();

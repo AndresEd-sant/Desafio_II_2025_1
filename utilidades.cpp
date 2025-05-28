@@ -17,6 +17,7 @@ void menuPrincipal() {
     cout << "1. Login\n2. Salir\n";
 }
 
+
 void menuUsuario() {
     cout << "\n=== MENU HUESPED ===\n";
     cout << "1. Hacer reservacion\n";
@@ -32,6 +33,7 @@ string login(Usuarios*& usuario) {
 
     // --- Verificar administrador ---
     ifstream archivo("administradores.txt");
+
     if (archivo.is_open()) {
         string linea;
         while (getline(archivo, linea)) {
@@ -39,7 +41,6 @@ string login(Usuarios*& usuario) {
             string doc, pass, nombre, puntuacionStr, numLugaresStr;
             getline(ss, doc, ';'); getline(ss, pass, ';'); getline(ss, nombre, ';');
             getline(ss, puntuacionStr, ';'); getline(ss, numLugaresStr, ';');
-
             if (doc == documento) {
                 int intentos = 3;
                 while (intentos-- > 0) {
@@ -47,30 +48,32 @@ string login(Usuarios*& usuario) {
                     cin >> contrasena;
                     if (contrasena == pass) {
                         archivo.close();
-                        // return "admin";
-                        // adminObj = new Administrador(nombre, doc, pass, stoi(numLugaresStr), stof(puntuacionStr));
-                        return "admin"; // dejar activo si más adelante lo necesitas
+                         return "admin";
+                         adminObj = new Administrador(nombre, doc, pass, stoi(numLugaresStr), stof(puntuacionStr));
+                        return "admin"; 
                     } else {
                         cout << "Contrasena incorrecta. Intentos restantes: " << intentos << endl;
                     }
                 }
                 archivo.close();
                 return "0";
+
             }
         }
         archivo.close();
     }
 
+
     // --- Verificar usuario ---
     archivo.open("usuarios.txt");
     if (archivo.is_open()) {
+
         string linea;
         while (getline(archivo, linea)) {
             istringstream ss(linea);
             string doc, pass, nombre, antiguedad, puntuacion;
             getline(ss, doc, ';'); getline(ss, pass, ';'); getline(ss, nombre, ';');
             getline(ss, antiguedad, ';'); getline(ss, puntuacion, ';');
-
             if (doc == documento) {
                 int intentos = 3;
                 while (intentos-- > 0) {
@@ -208,4 +211,5 @@ void guardarComentarioReserva(const string& nombreUsuario, const string& codLuga
         out.close();
         cout << "Comentario guardado correctamente.\n";
     }
+
 }
