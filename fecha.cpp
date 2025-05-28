@@ -1,6 +1,5 @@
 #include "fecha.h"
 #include <cstdio>
-#include <cstring>
 #include <iostream>
 using namespace std;
 
@@ -9,6 +8,7 @@ fecha::fecha(unsigned short int d, unsigned short int m, unsigned short int a) {
     mes = m;
     anio = a;
 }
+
 
 unsigned short int fecha::getDia() { return dia; }
 unsigned short int fecha::getMes() { return mes; }
@@ -29,16 +29,17 @@ bool fecha::operator>(const fecha& otra) const {
 bool fecha::operator==(const fecha& otra) const {
     return dia == otra.dia && mes == otra.mes && anio == otra.anio;
 }
-
-unsigned int fecha::diasHasta(const fecha& otra) const {
+unsigned int fecha::diasHasta(const fecha& otra) {
     unsigned int contador = 0;
     fecha actual = *this;
 
     while (actual < otra) {
         actual.sumarDias(1);
         contador++;
+        iteraciones++;
     }
 
+    cout << "iteraciones usadas en el metodo diasHasta: "<<iteraciones<<endl;
     return contador;
 }
 
@@ -71,7 +72,6 @@ bool fecha::esValida() const {
 }
 
 
-
 const char* fecha::formatoExtendido() {
     static const char* diasSemana[] = {"Sabado", "Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes"};
     static const char* meses[] = {
@@ -80,7 +80,6 @@ const char* fecha::formatoExtendido() {
     };
 
     unsigned short int d = dia, m = mes, y = anio;
-
     if (m < 3) {
         m += 12;
         y -= 1;
@@ -94,13 +93,12 @@ const char* fecha::formatoExtendido() {
     return resultado;
 }
 
-
 void  fecha::sumarDias(int n) {
     // Días por mes común
     static const int diasMes[] = { 31,28,31,30,31,30,31,31,30,31,30,31 };
 
-
     for (int i = 0; i < n; ++i) {
+        iteraciones++;
         dia++;
 
         bool bisiesto = (anio % 4 == 0 && anio % 100 != 0) || (anio % 400 == 0);
@@ -117,9 +115,3 @@ void  fecha::sumarDias(int n) {
         }
     }
 }
-
-fecha::~fecha(){
-    //nada dinamico
-}
-
-

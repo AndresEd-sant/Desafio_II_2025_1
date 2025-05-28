@@ -1,6 +1,5 @@
 #ifndef USUARIOS_H
 #define USUARIOS_H
-#include <iostream>
 #include <string>
 using namespace std;
 
@@ -11,6 +10,7 @@ private:
     string Nombre;
     string Antiguedad;
     string Calificacion;
+    int iteraciones=0;
 
 public:
     Usuarios(string documento, string contrasena, string nombre ,string Antiguedad);

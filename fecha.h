@@ -7,6 +7,7 @@ using namespace std;
 class fecha {
 private:
     unsigned short int dia, mes, anio;
+    int iteraciones=0;
 
 public:
     fecha(unsigned short int d, unsigned short int m, unsigned short int a);
@@ -14,20 +15,16 @@ public:
     string formatoCorto() const;
     const char* formatoExtendido();
     bool esValida() const;
-
     unsigned short int getDia();
     unsigned short int getMes();
     unsigned short int getAnio();
 
     void sumarDias(int n);
-    unsigned int diasHasta(const fecha& otra) const;
-
+    unsigned int diasHasta(const fecha& otra);
 
     bool operator<(const fecha& otra) const;
     bool operator>(const fecha& otra) const;
     bool operator==(const fecha& otra) const;
-
-    ~fecha();
 
 };
 

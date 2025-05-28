@@ -5,13 +5,14 @@
 #include "fecha.h"
 
 administrador::administrador(string nombre, string documento, string contrasena,
-                             unsigned int n_lugares, float puntuacion) {
-    Nombre = nombre;
-    Documento = documento;
-    Contrasena = contrasena;
-    N_lugares = n_lugares;
-    Puntuacion = puntuacion;
-    lugares = new Lugar*[N_lugares]; // arreglo dinámico
+                             unsigned int n_lugares, float puntuacion)
+    : Nombre(nombre),
+    Documento(documento),
+    Contrasena(contrasena),
+    N_lugares(n_lugares),
+    Puntuacion(puntuacion)
+{
+    lugares = new Lugar*[N_lugares];
 }
 
 string administrador::getDocumento() {
@@ -42,9 +43,10 @@ void administrador::cargarLugaresDesdeArchivo(const string& nombreArchivo) {
     unsigned int index = 0;
 
     while (getline(archivo, linea) && index < N_lugares) {
+        iteraciones++;
         stringstream ss(linea);
         string codigo, nombre, departamento, municipio, tipo, precioStr, docAdmin, puntuacionStr;
-
+        iteraciones++;
         getline(ss, codigo, ';');
         getline(ss, nombre, ';');
         getline(ss, departamento, ';');
@@ -62,6 +64,8 @@ void administrador::cargarLugaresDesdeArchivo(const string& nombreArchivo) {
     }
 
     archivo.close();
+    cout<<endl << "Iteraciones para cargar los lugares de este administrador: "<<iteraciones<<endl;
+    iteraciones = 0;
 }
 
 void administrador::verYcancelarReservasActivas(const string& archivoReservas) {
@@ -83,6 +87,7 @@ void administrador::verYcancelarReservasActivas(const string& archivoReservas) {
         getline(ss, idLugar, ';');
 
         for (unsigned int i = 0; i < N_lugares; ++i) {
+            iteraciones++;
             if (lugares[i]->getCodigo() == idLugar) {
                 reservasAdmin++;
                 break;
@@ -93,6 +98,8 @@ void administrador::verYcancelarReservasActivas(const string& archivoReservas) {
 
     if (reservasAdmin == 0) {
         cout << "\nNo hay reservas activas para tus alojamientos actualmente.\n";
+        cout << "Iteraciones Realizadas en este metodo: "<<iteraciones<<endl;
+        iteraciones = 0;
         return;
     }
 
@@ -101,6 +108,7 @@ void administrador::verYcancelarReservasActivas(const string& archivoReservas) {
     string** reservas = new string*[reservasAdmin];
     unsigned int index = 0;
     while (getline(archivo, linea)) {
+        iteraciones++;
         stringstream ss(linea);
         string codRes, doc, nombreH, idLugar, fechaIni, fechaFin, costo;
 
@@ -113,6 +121,7 @@ void administrador::verYcancelarReservasActivas(const string& archivoReservas) {
         getline(ss, costo, ';');
 
         for (unsigned int i = 0; i < N_lugares; ++i) {
+            iteraciones++;
             if (lugares[i]->getCodigo() == idLugar) {
                 reservas[index] = new string[7];
                 reservas[index][0] = codRes;
@@ -135,12 +144,13 @@ void administrador::verYcancelarReservasActivas(const string& archivoReservas) {
     for (unsigned int i = 0; i < reservasAdmin; ++i) {
         string nombreLugar = "Desconocido";
         for (unsigned int j = 0; j < N_lugares; ++j) {
+            iteraciones++;
             if (lugares[j]->getCodigo() == reservas[i][3]) {
                 nombreLugar = lugares[j]->getNombre();
                 break;
             }
         }
-
+        iteraciones++;
         cout << "\n[" << i + 1 << "] Reserva " << reservas[i][0] << ": " << reservas[i][2]
              << " | Lugar: " << nombreLugar
              << " | Fechas: " << reservas[i][4] << " -> " << reservas[i][5]
@@ -167,6 +177,7 @@ void administrador::verYcancelarReservasActivas(const string& archivoReservas) {
 
             string tempLinea;
             while (getline(entrada, tempLinea)) {
+                iteraciones++;
                 if (tempLinea.substr(0, codigoAEliminar.length()) != codigoAEliminar) {
                     salida << tempLinea << endl;
                 }
@@ -182,11 +193,17 @@ void administrador::verYcancelarReservasActivas(const string& archivoReservas) {
         } else {
             cout << "Opcion invalida.\n";
         }
+
     }
 
     for (unsigned int i = 0; i < reservasAdmin; ++i)
-    {delete[] reservas[i];}
+    {
+        iteraciones++;
+        delete[] reservas[i];
+    }
     delete[] reservas;
+    cout << "Iteraciones Realizadas en este metodo: "<<iteraciones<<endl;
+    iteraciones = 0;
 }
 
 
@@ -217,12 +234,13 @@ void administrador::actualizarHistorico(const string& archivoReservas, const str
 
     while (getline(entrada, linea)) {
 
-
+        iteraciones++;
         // Separar los 7 campos usando posiciones y substrings
         int indices[7];
         int count = 0;
 
         for (int i = 0; i < linea.length() && count < 7; ++i) {
+            iteraciones++;
             if (linea[i] == ';') {
                 indices[count++] = i;
             }
@@ -259,6 +277,7 @@ void administrador::actualizarHistorico(const string& archivoReservas, const str
     rename("temp.txt", archivoReservas.c_str());
 
     cout << "Histórico actualizado exitosamente. " << movidas << " reservas movidas.\n";
+    cout << "Iteraciones realizadas en este metodo: "<<iteraciones<<endl;
 }
 
 

@@ -51,6 +51,7 @@ void Usuarios::hacerReserva() {
     bool seMostroAlMenosUno = false;
 
     while (getline(archivoLugares, linea)) {
+        iteraciones++;
         stringstream ss(linea);
         getline(ss, codLugar, ';');
         getline(ss, nombreLugar, ';');
@@ -81,30 +82,22 @@ void Usuarios::hacerReserva() {
 
     if (!seMostroAlMenosUno) {
         cout << "\nNo se encontraron lugares con los filtros seleccionados.\n";
+        cout << "Iteraciones realizadas al hacer la reserva: "<<iteraciones<<endl;
+        iteraciones =0;
         return;
     }
     unsigned int costoUniLugar = 0;
     string codSeleccionado;
-    while (true) {
-        cout << "\nIngrese el codigo del lugar que desea reservar: ";
-        cin >> codSeleccionado;
 
-        costoUniLugar = obtenerCostoLugar(codSeleccionado);
-
-        if (costoUniLugar != 0) {
-            cout << "Lugar validado y  encontrado\n";
-            break; // código válido
-        } else {
-            cout << "Codigo invalido. Por favor intente nuevamente.\n";
-        }
-    }
-
+    cout << "\nIngrese el codigo del lugar que desea reservar: ";
+    cin >> codSeleccionado;
 
     fecha* inicio = nullptr;
     fecha* fin = nullptr;
 
     // Ingreso validado de fechas
     do {
+        iteraciones++;
         unsigned short anio, mes, dia;
         cout << "\n=== Ingrese la FECHA DE INICIO ===\n";
         cout << "Anio: "; cin >> anio;
@@ -113,13 +106,14 @@ void Usuarios::hacerReserva() {
         inicio = new fecha(dia, mes, anio);
 
         if (!inicio->esValida()) {
-            cout << " Fecha de inicio invalida. Intente de nuevo.\n";
+            cout << " Fecha de inicio inválida. Intente de nuevo.\n";
             delete inicio;
             inicio = nullptr;
         }
     } while (inicio == nullptr);
 
     do {
+        iteraciones++;
         unsigned short anio, mes, dia;
         cout << "\n=== Ingrese la FECHA DE FIN ===\n";
         cout << "Anio: "; cin >> anio;
@@ -139,6 +133,8 @@ void Usuarios::hacerReserva() {
         cout << " La fecha de inicio debe ser anterior a la fecha de fin.\n";
         delete inicio;
         delete fin;
+        cout << "Iteraciones Realizadas en este metodo: "<<iteraciones<<endl;
+        iteraciones = 0;
         return;
     }
 
@@ -147,11 +143,14 @@ void Usuarios::hacerReserva() {
         cout << "Error al abrir reservas_activas.txt\n";
         delete inicio;
         delete fin;
+        cout << "Iteraciones Realizadas en este metodo: "<<iteraciones<<endl;
+        iteraciones = 0;
         return;
     }
 
     string lineaReserva;
     while (getline(archivoReservas, lineaReserva)) {
+        iteraciones++;
         stringstream ss(lineaReserva);
         string codR, cedulaU, nombreU, codL, fInicio, fFin, costoStr;
         getline(ss, codR, ';');
@@ -175,6 +174,8 @@ void Usuarios::hacerReserva() {
                 delete reservadaFin;
                 delete inicio;
                 delete fin;
+                cout << "Iteraciones Realizadas en este metodo: "<<iteraciones<<endl;
+                iteraciones = 0;
                 return;
             }
             delete reservadaInicio;
@@ -190,6 +191,8 @@ void Usuarios::hacerReserva() {
         cout << "Error al guardar la reserva.\n";
         delete inicio;
         delete fin;
+        cout << "Iteraciones Realizadas en este metodo: "<<iteraciones<<endl;
+        iteraciones = 0;
         return;
     }
 
@@ -204,6 +207,8 @@ void Usuarios::hacerReserva() {
 
     delete inicio;
     delete fin;
+    cout << "Iteraciones Realizadas en este metodo: "<<iteraciones<<endl;
+    iteraciones = 0;
 }
 
 void Usuarios::cancelarReserva() {
@@ -222,6 +227,7 @@ void Usuarios::cancelarReserva() {
 
     cout << "\n=== TUS RESERVAS ===\n";
     while (getline(inFile, linea)) {
+        iteraciones++;
         istringstream ss(linea);
         string id, doc, nombreU, codLugar, fechaIni, fechaFin, precio;
         getline(ss, id, ';');
@@ -257,6 +263,8 @@ void Usuarios::cancelarReserva() {
         cout << "No tienes reservas activas para cancelar.\n";
         inFile.close();
         delete[] idsValidos;
+        cout << "Iteraciones Realizadas en este metodo: "<<iteraciones<<endl;
+        iteraciones = 0;
         return;
     }
 
@@ -265,10 +273,12 @@ void Usuarios::cancelarReserva() {
     bool valido = false;
 
     do {
+        iteraciones++;
         cout << "\nIngrese el ID de la reserva que desea cancelar: ";
         cin >> idCancel;
         valido = false;
         for (int i = 0; i < totalIDs; i++) {
+            iteraciones++;
             if (idsValidos[i] == idCancel) {
                 valido = true;
                 break;
@@ -285,11 +295,14 @@ void Usuarios::cancelarReserva() {
         cout << "No se pudo crear archivo temporal.\n";
         inFile.close();
         delete[] idsValidos;
+        cout << "Iteraciones Realizadas en este metodo: "<<iteraciones<<endl;
+        iteraciones = 0;
         return;
     }
 
     bool eliminada = false;
     while (getline(inFile, linea)) {
+        iteraciones++;
         istringstream ss(linea);
         string id, doc;
         getline(ss, id, ';');
@@ -312,8 +325,10 @@ void Usuarios::cancelarReserva() {
         cout << " Reserva cancelada exitosamente.\n";
     } else {
         remove("temp.txt");
-        cout << "No se encontro la reserva con ese ID.\n";
+        cout << " No se encontro la reserva con ese ID.\n";
     }
+    cout << "Iteraciones Realizadas en este metodo: "<<iteraciones<<endl;
+    iteraciones = 0;
 }
 
 
@@ -328,6 +343,7 @@ void Usuarios::verReservas() {
     bool encontrada = false;
     cout << "\n=== TUS RESERVAS ===\n";
     while (getline(inFile, linea)) {
+        iteraciones++;
         istringstream ss(linea);
         string id, doc, nombreU, codLugar, fechaIni, fechaFin, precio;
         getline(ss, id, ';');
@@ -351,4 +367,6 @@ void Usuarios::verReservas() {
     }
 
     inFile.close();
+    cout << "Iteraciones Realizadas en este metodo: "<<iteraciones<<endl;
+    iteraciones = 0;
 }

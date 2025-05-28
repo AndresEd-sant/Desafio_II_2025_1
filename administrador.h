@@ -14,6 +14,7 @@ private:
     unsigned int N_lugares;
     float Puntuacion;
     Lugar** lugares;
+    int iteraciones=0;
 
 public:
     administrador(string nombre, string documento, string contrasena,

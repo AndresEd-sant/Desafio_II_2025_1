@@ -1,20 +1,15 @@
 #include "lugar.h"
 
-#include <iostream>
-using namespace std;
-
-
 Lugar::Lugar(string codigo, string nombre, string departamento, string municipio,
-             string tipo, float precioNoche, string documentoAdmin, float puntuacion) {
-    this->codigo = codigo;
-    this->nombre = nombre;
-    this->departamento = departamento;
-    this->municipio = municipio;
-    this->tipo = tipo;
-    this->precioNoche = precioNoche;
-    this->documentoAdmin = documentoAdmin;
-    this->puntuacion = puntuacion;
-}
+             string tipo, float precioNoche, string documentoAdmin, float puntuacion)
+    : codigo(codigo),
+    nombre(nombre),
+    departamento(departamento),
+    municipio(municipio),
+    tipo(tipo),
+    precioNoche(precioNoche),
+    documentoAdmin(documentoAdmin),
+    puntuacion(puntuacion) {}
 
 string Lugar::getCodigo() { return codigo; }
 string Lugar::getNombre() { return nombre; }
