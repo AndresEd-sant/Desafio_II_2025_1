@@ -95,7 +95,7 @@ void Usuarios::hacerReserva() {
             cout << "Lugar validado y  encontrado\n";
             break; // código válido
         } else {
-            cout << "Código inválido. Por favor intente nuevamente.\n";
+            cout << "Codigo invalido. Por favor intente nuevamente.\n";
         }
     }
 
@@ -113,7 +113,7 @@ void Usuarios::hacerReserva() {
         inicio = new fecha(dia, mes, anio);
 
         if (!inicio->esValida()) {
-            cout << " Fecha de inicio inválida. Intente de nuevo.\n";
+            cout << " Fecha de inicio invalida. Intente de nuevo.\n";
             delete inicio;
             inicio = nullptr;
         }
