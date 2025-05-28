@@ -30,9 +30,47 @@ bool fecha::operator==(const fecha& otra) const {
     return dia == otra.dia && mes == otra.mes && anio == otra.anio;
 }
 
-void fecha::mostrar() const {
-    printf("%04d-%02d-%02d", anio, mes, dia);
+unsigned int fecha::diasHasta(const fecha& otra) const {
+    unsigned int contador = 0;
+    fecha actual = *this;
+
+    while (actual < otra) {
+        actual.sumarDias(1);
+        contador++;
+    }
+
+    return contador;
 }
+
+string fecha::formatoCorto() const {
+    string resultado;
+
+    resultado += to_string(anio);
+    resultado += "-";
+    if (mes < 10) resultado += "0";
+    resultado += to_string(mes);
+    resultado += "-";
+    if (dia < 10) resultado += "0";
+    resultado += to_string(dia);
+    return resultado;
+}
+
+bool fecha::esValida() const {
+    if (anio < 1 || mes < 1 || mes > 12 || dia < 1){
+        return false;
+    }
+    static const int diasMes[] = {31,28,31,30,31,30,31,31,30,31,30,31};
+
+    bool bisiesto = (anio % 4 == 0 && anio % 100 != 0) || (anio % 400 == 0);
+    int diasEnEsteMes = diasMes[mes - 1];
+
+    if (mes == 2 && bisiesto)
+        diasEnEsteMes = 29;
+
+    return dia <= diasEnEsteMes;
+}
+
+
 
 const char* fecha::formatoExtendido() {
     static const char* diasSemana[] = {"Sabado", "Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes"};
@@ -41,7 +79,8 @@ const char* fecha::formatoExtendido() {
         "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
     };
 
-    int d = dia, m = mes, y = anio;
+    unsigned short int d = dia, m = mes, y = anio;
+
     if (m < 3) {
         m += 12;
         y -= 1;
@@ -55,9 +94,11 @@ const char* fecha::formatoExtendido() {
     return resultado;
 }
 
-void fecha::sumarDias(int n) {
+
+void  fecha::sumarDias(int n) {
     // Días por mes común
-    unsigned short int diasMes[] = { 31,28,31,30,31,30,31,31,30,31,30,31 };
+    static const int diasMes[] = { 31,28,31,30,31,30,31,31,30,31,30,31 };
+
 
     for (int i = 0; i < n; ++i) {
         dia++;

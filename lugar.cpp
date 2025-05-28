@@ -1,5 +1,9 @@
 #include "lugar.h"
 
+#include <iostream>
+using namespace std;
+
+
 Lugar::Lugar(string codigo, string nombre, string departamento, string municipio,
              string tipo, float precioNoche, string documentoAdmin, float puntuacion) {
     this->codigo = codigo;

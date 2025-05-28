@@ -1,13 +1,18 @@
 // src/main.cpp
 #include <iostream>
-#include "administrador.h"
+#include <string>
+#include "usuarios.h"
 #include "utilidades.h"
+#include "lugar.h"
+#include "administrador.h"
+
 
 using namespace std;
 
 int main() {
-    while (true)
-    {
+
+    while (true) {
+
         unsigned short int selec = 0;
 
         do {
@@ -19,8 +24,7 @@ int main() {
             cout << "Saliendo del sistema. Hasta luego\n";
             break;
         }
-
-        //usuario* userObj = nullptr;
+        Usuarios* userObj = nullptr;
         administrador* adminObj = nullptr;
         string tipo = login(adminObj);
 
@@ -28,6 +32,7 @@ int main() {
             cout << "\nInicio de sesion exitoso como ADMINISTRADOR\n";
             cout << "Bienvenido " << adminObj->getNombre() << endl;
             adminObj->cargarLugaresDesdeArchivo("lugares.txt");
+
 
             unsigned int opcion;
             do {
@@ -54,41 +59,38 @@ int main() {
                 }
             } while (opcion != 4);
 
-            delete adminObj;
-        }
-        else if (tipo == "usuario"){
 
+        } else if (tipo == "user") {
             cout << "\nInicio de sesion exitoso como USUARIO\n";
-            //cout << "Bienvenido " << userObj->getNombre() << endl;
-
-
+            cout << "Bienvenido, " << usuario->getNombre() << endl;
             unsigned int opcion;
             do {
                 menuUsuario();
                 cin >> opcion;
                 switch (opcion) {
                 case 1:
-                    cout << "(  )\n";
+                    usuario->hacerReserva();
                     break;
-                case 2: {
-                    //userObj->verYcancelarReservasActivas("reservas_activas.txt");
+                case 2:
+                    usuario->verReservas();
                     break;
-                }
                 case 3:
-                    //cout << "Cerrando sesion de " << UserObj->getNombre() << ".\n";
+                    usuario->cancelarReserva();
+                    break;
+                case 4:
+                    cout << "Cerrando sesion de " << usuario->getNombre() << ".\n";
                     break;
                 default:
                     cout << "Opcion invalida.\n";
                 }
-            } while (opcion != 3);
+            } while (opcion != 4);
 
-            delete adminObj;
-            break;
-        }
-        else {
+            delete usuario;
+
+        } else {
             cout << "\nCredenciales invalidas o usuario no encontrado.\n";
         }
-
     }
-return 0;
+
+    return 0;
 }

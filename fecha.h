@@ -11,19 +11,24 @@ private:
 public:
     fecha(unsigned short int d, unsigned short int m, unsigned short int a);
 
-    void mostrar() const;
+    string formatoCorto() const;
     const char* formatoExtendido();
+    bool esValida() const;
 
     unsigned short int getDia();
     unsigned short int getMes();
     unsigned short int getAnio();
 
-    void sumarDias(int n); // nuevo
+    void sumarDias(int n);
+    unsigned int diasHasta(const fecha& otra) const;
+
 
     bool operator<(const fecha& otra) const;
     bool operator>(const fecha& otra) const;
     bool operator==(const fecha& otra) const;
+
     ~fecha();
+
 };
 
 #endif // FECHA_H
