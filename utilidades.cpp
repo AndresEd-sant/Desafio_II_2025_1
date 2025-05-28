@@ -187,7 +187,7 @@ void guardarComentarioReserva(const string& nombreUsuario, const string& codLuga
 
     if (opcion == 's' || opcion == 'S') {
         string comentario;
-        cout << "Ingrese su comentario (maximo 1000 caracteres) : \n";
+        cout << "Ingrese su comentario (maximo 1000 caracteres) :\n";
         getline(cin, comentario);
 
         while (comentario.length() > 1000) {

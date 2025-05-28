@@ -85,9 +85,20 @@ void Usuarios::hacerReserva() {
     }
     unsigned int costoUniLugar = 0;
     string codSeleccionado;
+    while (true) {
+        cout << "\nIngrese el codigo del lugar que desea reservar: ";
+        cin >> codSeleccionado;
 
-    cout << "\nIngrese el codigo del lugar que desea reservar: ";
-    cin >> codSeleccionado;
+        costoUniLugar = obtenerCostoLugar(codSeleccionado);
+
+        if (costoUniLugar != 0) {
+            cout << "Lugar validado y  encontrado\n";
+            break; // código válido
+        } else {
+            cout << "Código inválido. Por favor intente nuevamente.\n";
+        }
+    }
+
 
     fecha* inicio = nullptr;
     fecha* fin = nullptr;
@@ -301,7 +312,7 @@ void Usuarios::cancelarReserva() {
         cout << " Reserva cancelada exitosamente.\n";
     } else {
         remove("temp.txt");
-        cout << " No se encontro la reserva con ese ID.\n";
+        cout << "No se encontro la reserva con ese ID.\n";
     }
 }
 

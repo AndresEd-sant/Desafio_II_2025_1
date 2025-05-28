@@ -68,7 +68,7 @@ int main() {
                     usuario->hacerReserva();
                     break;
                 case 2:
-                    //usuario->verReservas();
+                    usuario->verReservas();
                     break;
                 case 3:
                     usuario->cancelarReserva();
