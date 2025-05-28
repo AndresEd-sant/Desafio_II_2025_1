@@ -7,12 +7,10 @@ using namespace std;
 class Usuarios {
 private:
     string Documento;
-    string Nombre;
     string Contrasena;
+    string Nombre;
     string Antiguedad;
     string Calificacion;
-    string* ReservasT; // Arreglo dinámico de strings (reservas)
-    unsigned int N_reservaciones;
 
 public:
     Usuarios(string documento, string contrasena, string nombre ,string Antiguedad);
@@ -21,7 +19,6 @@ public:
     string getNombre();
     string getContrasena();
     string getAntiguedad();
-    unsigned int getN_reservaciones();
     void cancelarReserva();
     void hacerReserva();
     void verReservas();

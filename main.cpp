@@ -68,16 +68,16 @@ int main() {
                     usuario->hacerReserva();
                     break;
                 case 2:
-                    usuario->verReservas();
+                    //usuario->verReservas();
                     break;
                 case 3:
                     usuario->cancelarReserva();
                     break;
                 case 4:
-                    cout << "Cerrando sesión de " << usuario->getNombre() << ".\n";
+                    cout << "Cerrando sesion de " << usuario->getNombre() << ".\n";
                     break;
                 default:
-                    cout << "Opción inválida.\n";
+                    cout << "Opcion invalida.\n";
                 }
             } while (opcion != 4);
 

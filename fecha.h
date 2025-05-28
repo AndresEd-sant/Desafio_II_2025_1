@@ -18,7 +18,8 @@ public:
     unsigned short int getMes();
     unsigned short int getAnio();
 
-    void sumarDias(int n); // nuevo
+    void sumarDias(int n);
+    unsigned int diasHasta(const fecha& otra) const;
 
     bool operator<(const fecha& otra) const;
     bool operator>(const fecha& otra) const;

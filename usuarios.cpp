@@ -83,9 +83,10 @@ void Usuarios::hacerReserva() {
         cout << "\nNo se encontraron lugares con los filtros seleccionados.\n";
         return;
     }
+    unsigned int costoUniLugar = 0;
+    string codSeleccionado;
 
     cout << "\nIngrese el codigo del lugar que desea reservar: ";
-    string codSeleccionado;
     cin >> codSeleccionado;
 
     fecha* inicio = nullptr;
@@ -153,8 +154,6 @@ void Usuarios::hacerReserva() {
         if (codL == codSeleccionado || cedulaU == Documento) {
             fecha* reservadaInicio =convertirAFecha(fInicio.c_str());
             fecha* reservadaFin = convertirAFecha(fFin.c_str());
-            cout<<reservadaInicio->formatoCorto()<<"esto es lo que se convierte "<<endl;
-            cout<<reservadaFin->formatoCorto()<<"esto es lo que se convierte "<<endl;
 
             if (hayConflictoFechas(inicio, fin, reservadaInicio, reservadaFin)) {
                 cout << "\n Conflicto de fechas con una reserva existente:\n";
@@ -172,9 +171,8 @@ void Usuarios::hacerReserva() {
         }
     }
     archivoReservas.close();
-
-    int costoTotal = 100000;
-    string nuevoCodigo = "R" + Documento.substr(Documento.length() - 3) + "01";
+    unsigned int costoTotal =inicio->diasHasta(*fin)* costoUniLugar;
+    string nuevoCodigo = generarCodigoUnico() ;
 
     ofstream out("reservas_activas.txt", ios::app);
     if (!out) {
@@ -188,9 +186,9 @@ void Usuarios::hacerReserva() {
     out << nuevoCodigo << ";" << Documento << ";" << Nombre << ";" << codSeleccionado << ";"
         << inicio->formatoCorto() << ";" << fin->formatoCorto() << ";" << costoTotal << ";\n";
     out.close();
-
+    guardarComentarioReserva(Nombre, codSeleccionado, inicio, fin);
     cout << "\n Reserva registrada exitosamente.\n";
-    cout << " Su reserva está para el " << inicio->formatoExtendido() << " hasta el "
+    cout << " Su reserva esta para el " << inicio->formatoExtendido() << " hasta el "
          << fin->formatoExtendido() << ".\n";
 
     delete inicio;
@@ -204,18 +202,14 @@ void Usuarios::cancelarReserva() {
         return;
     }
 
-    ofstream tempFile("temp.txt");
-    if (!tempFile.is_open()) {
-        cout << "No se pudo crear archivo temporal.\n";
-        inFile.close();
-        return;
-    }
+    int capacidad = 10; // capacidad inicial
+    int totalIDs = 0;
+    string* idsValidos = new string[capacidad];
 
     string linea;
     bool encontrada = false;
 
     cout << "\n=== TUS RESERVAS ===\n";
-    // Mostrar reservas del usuario para elegir cuál cancelar
     while (getline(inFile, linea)) {
         istringstream ss(linea);
         string id, doc, nombreU, codLugar, fechaIni, fechaFin, precio;
@@ -231,6 +225,19 @@ void Usuarios::cancelarReserva() {
             cout << "ID: " << id << " | Lugar: " << codLugar
                  << " | Fecha: " << fechaIni << " a " << fechaFin
                  << " | Precio: $" << precio << "\n";
+
+            // Si el arreglo está lleno, ampliar capacidad
+            if (totalIDs == capacidad) {
+                capacidad *= 2; // duplicar capacidad
+                string* temp = new string[capacidad];
+                for (int i = 0; i < totalIDs; i++) {
+                    temp[i] = idsValidos[i];
+                }
+                delete[] idsValidos;
+                idsValidos = temp;
+            }
+
+            idsValidos[totalIDs++] = id;
             encontrada = true;
         }
     }
@@ -238,21 +245,40 @@ void Usuarios::cancelarReserva() {
     if (!encontrada) {
         cout << "No tienes reservas activas para cancelar.\n";
         inFile.close();
-        tempFile.close();
-        remove("temp.txt");
+        delete[] idsValidos;
         return;
     }
+
+    // Validar ID ingresado
+    string idCancel;
+    bool valido = false;
+
+    do {
+        cout << "\nIngrese el ID de la reserva que desea cancelar: ";
+        cin >> idCancel;
+        valido = false;
+        for (int i = 0; i < totalIDs; i++) {
+            if (idsValidos[i] == idCancel) {
+                valido = true;
+                break;
+            }
+        }
+        if (!valido) cout << " ID invalido. Intenta nuevamente.\n";
+    } while (!valido);
 
     inFile.clear();
     inFile.seekg(0);
 
-    cout << "\nIngrese el ID de la reserva que desea cancelar: ";
-    string idCancel;
-    cin >> idCancel;
+    ofstream tempFile("temp.txt");
+    if (!tempFile.is_open()) {
+        cout << "No se pudo crear archivo temporal.\n";
+        inFile.close();
+        delete[] idsValidos;
+        return;
+    }
 
     bool eliminada = false;
     while (getline(inFile, linea)) {
-        // Eliminar línea que coincida con ID y Documento
         istringstream ss(linea);
         string id, doc;
         getline(ss, id, ';');
@@ -267,16 +293,19 @@ void Usuarios::cancelarReserva() {
 
     inFile.close();
     tempFile.close();
+    delete[] idsValidos;
 
     if (eliminada) {
         remove("reservas_activas.txt");
         rename("temp.txt", "reservas_activas.txt");
-        cout << "Reserva cancelada exitosamente.\n";
+        cout << " Reserva cancelada exitosamente.\n";
     } else {
         remove("temp.txt");
-        cout << "No se encontro la reserva con ese ID para tu usuario.\n";
+        cout << " No se encontro la reserva con ese ID.\n";
     }
 }
+
+
 void Usuarios::verReservas() {
     ifstream inFile("reservas_activas.txt");
     if (!inFile.is_open()) {

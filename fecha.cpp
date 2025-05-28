@@ -27,6 +27,18 @@ bool fecha::operator>(const fecha& otra) const {
 bool fecha::operator==(const fecha& otra) const {
     return dia == otra.dia && mes == otra.mes && anio == otra.anio;
 }
+unsigned int fecha::diasHasta(const fecha& otra) const {
+    unsigned int contador = 0;
+    fecha actual = *this;
+
+    while (actual < otra) {
+        actual.sumarDias(1);
+        contador++;
+    }
+
+    return contador;
+}
+
 string fecha::formatoCorto() const {
     string resultado;
 
@@ -77,7 +89,7 @@ const char* fecha::formatoExtendido() {
     return resultado;
 }
 
-void fecha::sumarDias(int n) {
+void  fecha::sumarDias(int n) {
     // Días por mes común
     static const int diasMes[] = { 31,28,31,30,31,30,31,31,30,31,30,31 };
 

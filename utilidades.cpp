@@ -128,3 +128,84 @@ fecha* convertirAFecha(const char* strFecha) {
 bool hayConflictoFechas(fecha* nuevaInicio, fecha* nuevaFin, fecha* existenteInicio, fecha* existenteFin) {
     return !( *nuevaFin < *existenteInicio || *existenteFin < *nuevaInicio );
 }
+string generarCodigoUnico() {
+    ifstream archivo("reservas_activas.txt");
+    int maxNum = 0;
+    string linea;
+
+    while (getline(archivo, linea)) {
+        if (linea.length() >= 2 && linea[0] == 'R') {
+            // Leer desde R hasta el primer ';'
+            size_t  posPuntoYComa = linea.find(';');
+            if (posPuntoYComa != string::npos) {
+                string numStr = linea.substr(1, posPuntoYComa - 1);
+                int num = atoi(numStr.c_str());
+                if (num > maxNum) maxNum = num;
+            }
+        }
+    }
+    archivo.close();
+
+    int nuevoNum = maxNum + 1;
+    return "R" + to_string(nuevoNum);
+}
+unsigned int obtenerCostoLugar(const string& codSeleccionado) {
+    ifstream archivo("lugares.txt");
+    if (!archivo.is_open()) {
+        cout << "Error al abrir el archivo de lugares.\n";
+        return 0;
+    }
+
+    string linea;
+    while (getline(archivo, linea)) {
+        stringstream ss(linea);
+        string cod, nombre, departamento, ciudad, tipo, costoStr, cedula, puntuacion;
+
+        getline(ss, cod, ';');
+        getline(ss, nombre, ';');
+        getline(ss, departamento, ';');
+        getline(ss, ciudad, ';');
+        getline(ss, tipo, ';');
+        getline(ss, costoStr, ';');
+        getline(ss, cedula, ';');
+        getline(ss, puntuacion, ';');
+
+        if (cod == codSeleccionado) {
+            archivo.close();
+            return atoi(costoStr.c_str());
+        }
+    }
+
+    archivo.close();
+    return 0;
+}
+void guardarComentarioReserva(const string& nombreUsuario, const string& codLugar, const fecha* inicio, const fecha* fin) {
+    char opcion;
+    cout << "\n  Desea dejar un comentario sobre esta reserva ? (s/n): ";
+    cin >> opcion;
+    cin.ignore(); // Limpiar salto de línea
+
+    if (opcion == 's' || opcion == 'S') {
+        string comentario;
+        cout << "Ingrese su comentario (maximo 1000 caracteres) : \n";
+        getline(cin, comentario);
+
+        while (comentario.length() > 1000) {
+            cout << "El comentario excede los 1000 caracteres. Intente nuevamente:\n";
+            getline(cin, comentario);
+        }
+
+        ofstream out("comentarios.txt", ios::app);
+        if (!out) {
+            cout << "Error al guardar el comentario.\n";
+            return;
+        }
+
+        out << nombreUsuario << ";" << codLugar << ";"
+            << inicio->formatoCorto() << ";" << fin->formatoCorto() << ";"
+            << comentario << "\n";
+
+        out.close();
+        cout << "Comentario guardado correctamente.\n";
+    }
+}
